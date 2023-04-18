@@ -1,0 +1,87 @@
+.centeredForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0px;
+}
+
+.sign-up-form{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    background-image: linear-gradient(white, white), radial-gradient(circle at top left, #f00,#3020ff);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 1px;
+    font-family: 'Poppins', 'sans-serif';
+    gap: 1rem;
+    text-align: center;
+}
+
+.sign-up-form h3{
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+    background: radial-gradient(circle at top right, #f00, #3020ff);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 10px;
+}
+
+.singUpbutton button{
+    border: 1px solid #dddd;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1rem;
+    font-family: 'Raleway', 'sans-serif';
+  
+}
+.singUpbutton {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+
+
+.inputsEach:hover{
+    border-bottom: 2px solid #726cc0;
+}
+
+.inputsEach{
+    border: none;
+    outline: transparent;
+    border-bottom: 2px solid #3020ff;
+    font-size: 1rem;
+    padding: 10px;
+    padding-left: 0px;
+}
+
+.singUpbutton button{
+    border: 1px solid #342da1;
+}
+
+.singUpbutton button:hover{
+    border: 1px solid #726cc0;
+    border-radius: 6px;
+   
+}
+
+.info{
+    margin-top: -10px;
+    color:#2039dcdd;
+    font-weight: bold;
+}

@@ -1,0 +1,58 @@
+.home-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.main-section h1 {
+  font-size: 50px;
+  background: -webkit-linear-gradient(#ca5e5e, #7318fd, #cb8b8b);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sign-in-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 40px;
+}
+
+.sign-in-up button {
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 7px;
+  color: aliceblue;
+  background-image:
+    linear-gradient(
+      to top right,
+      #cb8b8b, #7318fd, #cb8b8b
+    );
+  padding: 10px;
+  font-family: "Quicksand", "sans-serif";
+}
+
+.sign-in-up button:hover {
+  background: -webkit-linear-gradient(#ca5e5e, #7318fd, #cb8b8b);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  outline: 1px solid #7318fd;
+  background-color: rgb(66, 17, 140);
+  animation: formButtons 0.3s linear;
+  animation-fill-mode: forwards;  
+}
+
+
+
+@keyframes formButtons {
+    to {
+       transform: scale(1.05);
+       backface-visibility: hidden;
+       
+    }
+}
