@@ -2,20 +2,30 @@ import express from "express";
 import cors from "cors";
 import database from "./db";
 import jwt from "jsonwebtoken";
+import sha256 from "sha256";
+import generateAccessToken from "./utils/generateAccessToken";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 app.post("/api/account/login", async (req, res) => {
 
-  const query = "SELECT username FROM users WHERE username=? AND password=?"
+  const query = "SELECT id, username FROM users WHERE username=? AND password=?"
   try{
     const username = req.body.username;
     const password = req.body.password;
-    const requestToDB = await database.query(query, [username, password]);
-    const response = requestToDB.json();
-    console.log(response)
+   
+    database.query(query, [username, password]).then((result) => {
+      if(result.length !== 0){
+        const {id, username} = result[0];
+        const token = generateAccessToken(id, username);
+        res.send(token)
+      }
+    });
+  
 
   }catch(err){
     console.log(err)
