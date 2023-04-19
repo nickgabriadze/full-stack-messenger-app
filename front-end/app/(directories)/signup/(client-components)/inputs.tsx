@@ -23,7 +23,7 @@ export const UsernameInput = () => {
 
   return (
     <>
-      <input
+      <input 
         style={inputStyling}
         className={signupStyles.inputsEach}
         type={"text"}
@@ -36,8 +36,8 @@ export const UsernameInput = () => {
             })
           )
         }
-        title="At least 3 characters required"
-        required
+        
+
         minLength={3}
         maxLength={255}
       />
@@ -51,7 +51,7 @@ export const PasswordInput = () => {
 
   return (
     <>
-      <input
+      <input 
         style={inputStyling}
         className={signupStyles.inputsEach}
         type={"password"}
@@ -64,9 +64,7 @@ export const PasswordInput = () => {
             })
           )
         }
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$"
-        title="At least one lower, upper, number and 8 characters required"
-        required
+      
         maxLength={255}
       />
     </>
@@ -81,7 +79,7 @@ export const RepeatPasswordInput = () => {
 
   return (
     <>
-      <input
+      <input 
         className={signupStyles.inputsEach}
         style={inputStyling}
         type={"password"}
@@ -94,9 +92,8 @@ export const RepeatPasswordInput = () => {
             })
           )
         }
-        required
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$"
-        title="At least one lower, upper, number and 8 characters required"
+    
+        
         maxLength={255}
       />
     </>

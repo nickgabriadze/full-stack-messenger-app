@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import database from "./db";
-import jwt from "jsonwebtoken";
-import sha256 from "sha256";
 import generateAccessToken from "./utils/generateAccessToken";
 
 const app = express();
@@ -19,10 +17,13 @@ app.post("/api/account/login", async (req, res) => {
     const password = req.body.password;
    
     database.query(query, [username, password]).then((result) => {
+     
       if(result.length !== 0){
         const {id, username} = result[0];
         const token = generateAccessToken(id, username);
         res.send(token)
+      }else{
+        res.sendStatus(404)
       }
     });
   

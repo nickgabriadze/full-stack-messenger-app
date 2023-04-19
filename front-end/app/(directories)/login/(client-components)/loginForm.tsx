@@ -4,20 +4,31 @@ import loginStyling from "../login.module.css";
 import { PasswordInput, UsernameInput } from "./inputs";
 import { useAppSelector } from "@/app/(store)/hooks";
 import { useState } from "react";
+import loginChecker from "../checkLogin";
+import { saveToSession } from "@/app/utils/saveToSession";
 
 
 export const LoginForm = () => {
   const {username, password} = useAppSelector((state) => state.login)
-  const [data, setData] = useState("");
-  const handleLogin = async () => {
+  const [data, setData] = useState<Boolean | string>("");
+
+ async function handleLogin() {
+    try{
+    
       const request = await login(username, password);
       const response = request.data;
-      
-      if(response.length === 0){
-        setData("Username or password might not be correct")
-      }else{
-       console.log(response)
-      }
+      saveToSession(response)
+      setData("You've logged in successfully")
+      setTimeout(() => {
+        window.location.href=`/account/${username}`
+      }, 1500)
+    }catch(err){
+     
+     setData("Either the username or the password is invalid")
+     setTimeout(() => {
+      setData("")
+     },  1500)
+    }
     
   }
 
@@ -33,9 +44,24 @@ export const LoginForm = () => {
         </div>
 
         <div className={loginStyling.loginButton}>
-          <button onClick={handleLogin}>Continue</button>
+          <button onClick={() => {
+            
+            const checkInfo = loginChecker(username, password);
+            
+            if(checkInfo === true){
+                handleLogin()
+              
+            }else{
+              console.log(password)
+              setData(typeof checkInfo === "string" ? checkInfo : "")
+              setTimeout(() => {
+                setData("")
+              }, 1000)
+            }
+            
+            }}>Continue</button>
         </div>
-        <p>{data}</p>
+        <p className={loginStyling['info']}>{typeof data === "string" ? data: ""}</p>
       </div>
     </div>
     </>

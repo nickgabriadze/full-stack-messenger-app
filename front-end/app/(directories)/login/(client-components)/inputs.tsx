@@ -43,7 +43,7 @@ export const PasswordInput = () => {
         onChange={(e) => {
           dispatch(
             setPassword({
-              password: validateInput(e.target.value),
+              password: e.target.value,
             })
           );
         }}
