@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px 30px 10px 30px;
+  align-items: center;
+  border-bottom: 2px solid rgb(85, 85, 254);
+}
+
+.welcome h1 {
+  font-size: 2.5rem;
+}
+
+.welcome span {
+  color: rgb(70, 143, 207);
+}
+.welcome span::first-letter{
+    text-transform:uppercase;
+}
+
+
+.logo-div{
+    margin-right: 60px;
+}
+.online-offline{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.online-offline img {
+    cursor: pointer;
+   
+}
