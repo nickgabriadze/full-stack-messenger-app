@@ -2,7 +2,7 @@ import { Request } from "express";
 import jwt from "jsonwebtoken"
 
 export interface AuthenticatedRequest extends Request {
-    user: { id: string };
+    user: { id: string, username: string };
   }
 export const verify = (req:AuthenticatedRequest, res, next) => {
     const authHeader = req.headers.authorization;
@@ -13,7 +13,7 @@ export const verify = (req:AuthenticatedRequest, res, next) => {
         if (err) {
           return res.status(403).json("Token is invalid");
         }
-
+        
         req.user = user;
   
         next();

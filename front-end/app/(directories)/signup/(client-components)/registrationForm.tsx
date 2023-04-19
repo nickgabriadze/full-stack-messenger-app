@@ -3,7 +3,7 @@ import { useAppSelector } from "@/app/(store)/hooks";
 import { useState } from "react";
 import signupStyling from "../signup.module.css";
 import { PasswordInput, RepeatPasswordInput, UsernameInput } from "./inputs";
-import registerUser from "@/app/api/register";
+import registerUser from "@/app/api/auth/register";
 import { signUpChecker } from "../checkSignup";
 
 export const RegistrationForm = () => {
