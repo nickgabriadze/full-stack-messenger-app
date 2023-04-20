@@ -6,7 +6,7 @@ import requestsStyle from "./requestsPanel.module.css";
 import { useEffect, useState } from "react";
 import searchFriends from "@/app/api/account/searchFriends";
 
-export const RequestsPanel = ({ access }: { access: string | null }) => {
+export const RequestsPanel = ({ access }: { access: string | null | undefined}) => {
   const [reqPanel, setReqPanel] = useState(false);
   const [usersToSearch, setUsersToSearch] = useState<string>("");
   const [loadingSearchUsers, setLoadingSearchUsers] = useState(false);
@@ -19,7 +19,7 @@ export const RequestsPanel = ({ access }: { access: string | null }) => {
       setLoadingSearchUsers(true);
       try {
         const request = await searchFriends(
-          access !== null ? access : "",
+          (access === null || access === undefined) ? "" : access,
           usersToSearch
         );
         const response = request.data;

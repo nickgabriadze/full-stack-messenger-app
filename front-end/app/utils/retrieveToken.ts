@@ -12,4 +12,11 @@ export const retrieveToken = ():
   }
 };
 
+export const getAccessToken = ():string | null | undefined =>{
+  if (typeof window !== "undefined") {
+    const token = window.sessionStorage.getItem("user_access_token");
+    return token
+  }
+}
+
 export default retrieveToken;

@@ -6,7 +6,7 @@ import filledCircle from "../(headerPanel)/icons/button-checked.svg";
 import emptyCircle from "../(headerPanel)/icons/button-unchecked.svg";
 import Image from "next/image";
 
-export const UsersPanel = ({ access }: { access: string | null }) => {
+export const UsersPanel = ({ access }: { access: string | null | undefined }) => {
   const [friends, setFriends] = useState<
     { id: number; username: string; status: number }[]
   >([]);
@@ -17,7 +17,7 @@ export const UsersPanel = ({ access }: { access: string | null }) => {
     const getUserFreinds = async () => {
       setLoading(true);
       try {
-        const request = await retrieveFriends(access === null ? "" : access);
+        const request = await retrieveFriends((access === null || access === undefined) ? "" : access);
         const response = request.data;
         setFriends(response);
         

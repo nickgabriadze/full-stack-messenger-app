@@ -12,7 +12,7 @@ export const HeaderPanel = ({
   access,
 }: {
   username: string | undefined;
-  access: string | null;
+  access: string | null | undefined;
 }) => {
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export const HeaderPanel = ({
     const getStatusData = async () => {
       setLoading(true);
       try {
-        const request = await getStatus(access === null ? "" : access);
+        const request = await getStatus((access === null || access === undefined) ? "" : access);
         const data = request.data;
 
         setStatus(data.status === 0 ? false : true);
@@ -40,7 +40,7 @@ export const HeaderPanel = ({
 
   const handleStatusUpate = async () => {
     try {
-      await changeStatus(status, access === null ? "" : access);
+      await changeStatus(status, (access === null || access === undefined) ? "" : access);
     } catch (err) {
       console.log(err);
     }
