@@ -35,7 +35,7 @@ export const UsersPanel = ({ access }: { access: string | null }) => {
   }, [access]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <h1 className={friendsStyles['loading']}>Loading...</h1>;
   }
 
   return (

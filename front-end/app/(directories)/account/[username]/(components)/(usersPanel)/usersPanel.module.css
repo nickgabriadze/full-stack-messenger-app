@@ -60,3 +60,12 @@
     margin-top: -1px;
     z-index: -1
 }
+
+.loading{
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   padding: 20px;
+   color: grey
+}
