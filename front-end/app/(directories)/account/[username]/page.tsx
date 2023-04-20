@@ -14,7 +14,6 @@ export const AccountPage = () => {
   }
   
 
-  console.log(router)
   if (userInformation === undefined) {
     window.location.href = "/login";
   } else {

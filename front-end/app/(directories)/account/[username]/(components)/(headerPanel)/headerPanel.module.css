@@ -12,14 +12,12 @@
 }
 
 .welcome span {
-  color: rgb(70, 143, 207);
-}
-.welcome span::first-letter {
-  text-transform: uppercase;
+  color: #468fcf;
 }
 
+
 .logo-div {
-  margin-right: 120px;
+  margin-right: 60px;
   text-align: center;
   color: rgb(138, 138, 238);
   background: radial-gradient(circle at top right, #f00, #3020ff);
@@ -28,9 +26,15 @@
 }
 .online-offline {
   display: flex;
-  justify-content: center;
-  align-items: center;
+
+  gap: 2rem;
 }
 .online-offline img {
   cursor: pointer;
+}
+
+.online-offline > div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

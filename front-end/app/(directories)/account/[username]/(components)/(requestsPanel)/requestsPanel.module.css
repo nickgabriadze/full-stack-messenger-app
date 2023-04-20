@@ -1,0 +1,92 @@
+
+.reqPanel {
+  position: absolute;
+  height: 100%;
+  width: 400px;
+  background-color: #86b0d6f7;
+  right: 0;
+  top: 0;
+  border-top-left-radius: 40px;
+  animation: animateAppearance 500ms ease-in-out;
+}
+
+.reqPanel img{
+    margin: 20px;
+    margin-bottom: 0;
+    
+}
+
+.req-pals {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h2{
+    padding: 30px;
+    word-wrap: break-word;
+    word-break: keep-all;
+    text-align: center;
+    color:#432ff1
+}
+
+
+.search-for-friends input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #432ff1;
+    font-size: 1rem;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.search-for-friends input:focus{
+    outline: transparent;
+}
+
+.potential-friend{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    color:#e9e8f6;
+    background-color: #978deb;
+    border-radius: 10px;
+    width: 150%;
+    align-items: center;
+   
+}
+.potential-friend button{
+    background-color: #432ff1;
+    border: none;
+    color: white;
+    border-radius: 7px;
+    font-size: medium;
+    width: 80px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-friends-area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin: auto;
+    margin-top: 30px;
+}
+
+
+@keyframes animateAppearance {
+  from {
+    width: 0px;
+  }
+
+  to {
+    width: 400px;
+  }
+}

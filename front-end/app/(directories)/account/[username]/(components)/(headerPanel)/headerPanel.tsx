@@ -6,6 +6,7 @@ import filledCircle from "./icons/button-checked.svg";
 import emptyCircle from "./icons/button-unchecked.svg";
 import { useEffect, useState } from "react";
 import changeStatus, { getStatus } from "@/app/api/account/status";
+import RequestsPanel from "../(requestsPanel)/requestsPanel";
 export const HeaderPanel = ({
   username,
   access,
@@ -21,27 +22,25 @@ export const HeaderPanel = ({
       setLoading(true);
       try {
         const request = await getStatus(access === null ? "" : access);
-        const data =  request.data;
+        const data = request.data;
 
         setStatus(data.status === 0 ? false : true);
       } catch (err) {
         console.log(err);
-      }finally{
-      
+      } finally {
       }
     };
 
     getStatusData();
 
     return () => {
-      setLoading(false)
-    }
+      setLoading(false);
+    };
   }, [access]);
 
   const handleStatusUpate = async () => {
     try {
       await changeStatus(status, access === null ? "" : access);
-    
     } catch (err) {
       console.log(err);
     }
@@ -68,18 +67,21 @@ export const HeaderPanel = ({
 
       {loading ? (
         <div className={headerStyles["online-offline"]}>
-          <Image
-            onClick={() => {
-              setStatus((prev) => !prev);
-              handleStatusUpate();
-            }}
-            src={status ? filledCircle : emptyCircle}
-            width={30}
-            height={30}
-            alt="Online/Offline icon"
-          />
+          <div>
+            <Image
+              onClick={() => {
+                setStatus((prev) => !prev);
+                handleStatusUpate();
+              }}
+              src={status ? filledCircle : emptyCircle}
+              width={30}
+              height={30}
+              alt="Online/Offline icon"
+            />
 
-          <h3>{status ? "Online" : "Offline"}</h3>
+            <h3>{status ? "Online" : "Offline"}</h3>
+          </div>
+          <RequestsPanel access={access} />
         </div>
       ) : (
         <h4>Status Data Loading...</h4>
