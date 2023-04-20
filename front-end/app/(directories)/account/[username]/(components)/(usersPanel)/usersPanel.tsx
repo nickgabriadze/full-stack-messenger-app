@@ -20,7 +20,7 @@ export const UsersPanel = ({ access }: { access: string | null }) => {
         const request = await retrieveFriends(access === null ? "" : access);
         const response = request.data;
         setFriends(response);
-        console.log(response);
+        
       } catch (err) {
         console.log(err);
       } finally {
