@@ -1,0 +1,62 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+
+.friends-list {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  
+  
+}
+
+.each-friend {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor:pointer;
+  
+    
+  padding: 5px; 
+ 
+}
+
+.hand-crafted-image {
+  background-color: #7168f3;
+  padding: 5px;
+  color: white;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 99999px;
+  position: relative;
+}
+.circle-status span {
+  position: relative;
+  bottom: 60px;
+  left: 40px;
+}
+
+.username{
+    margin-top: -20px;
+    color:#b3afe9
+}
+
+.panel hr{
+    width: 100%;
+    background-color: #3020ff;
+    height: 1px;
+    border: none;
+    margin-top: -1px;
+    z-index: -1
+}

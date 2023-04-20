@@ -40,9 +40,8 @@ export const HeaderPanel = ({
 
   const handleStatusUpate = async () => {
     try {
-      const request = await changeStatus(status, access === null ? "" : access);
-      const response = request.data;
-     
+      await changeStatus(status, access === null ? "" : access);
+    
     } catch (err) {
       console.log(err);
     }
@@ -64,6 +63,7 @@ export const HeaderPanel = ({
           height={60}
           draggable={false}
         />
+        <h1>Friends</h1>
       </div>
 
       {loading ? (

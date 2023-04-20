@@ -1,10 +1,12 @@
 "use client";
 import { retrieveToken } from "@/app/utils/retrieveToken";
 import HeaderPanel from "./(components)/(headerPanel)/headerPanel";
+import UsersPanel from "./(components)/(usersPanel)/usersPanel";
 
 export const AccountPage = () => {
   const userInformation = retrieveToken();
-  const accessToken = sessionStorage.getItem("user_access_token");
+  const accessToken = typeof window !== undefined ? sessionStorage.getItem("user_access_token") : "";
+
   if (userInformation === undefined) {
     window.location.href = "/login";
   } else {
@@ -14,6 +16,8 @@ export const AccountPage = () => {
           username={userInformation?.username}
           access={accessToken}
         />
+
+        <UsersPanel access={accessToken}/>
       </div>
     );
   }

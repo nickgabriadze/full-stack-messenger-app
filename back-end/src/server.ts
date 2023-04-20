@@ -10,6 +10,22 @@ app.use(express.json());
 
 
 
+app.get('/api/account/friends', verify, async (req:AuthenticatedRequest, res)=> {
+    const userID = req.user.id;
+    const query = "SELECT id, username, status from users JOIN ((SELECT contactID from contacts where userID=?) as userContacts) ON users.id=userContacts.contactID"
+    try{
+      database.query(query, [userID]).then(
+        (friends) => {
+         
+          res.send(friends)}
+      ).catch(err => {
+        console.log(err)
+      })
+    }catch(err){
+      console.log(err)
+    }
+})
+
 app.post("/api/account/login", async (req, res) => {
 
   const query = "SELECT id, username FROM users WHERE username=? AND password=?"
