@@ -20,6 +20,7 @@ export const RequestsPanel = ({
   const [usersToSearch, setUsersToSearch] = useState<string>("");
   const [loadingSearchUsers, setLoadingSearchUsers] = useState(false);
   const [requestSentToIds, setRequestSentToIds] = useState<number[]>([]);
+  console.log(requestSentToIds)
   const [userRequests, setUserRequests] = useState<{id: number, username: string}[]>([]);
   const [potentialFriends, setPotentialFriends] = useState<
     { id: number; username: string }[]
@@ -148,7 +149,7 @@ export const RequestsPanel = ({
                         className={requestsStyle["potential-friend"]}
                       >
                         <h3>{potentialFriend.username}</h3>
-                       {requestSentToIds.filter(id => id === potentialFriend.id).length == 0 ? <button
+                       {requestSentToIds.filter(id => id === potentialFriend.id).length === 0 ? <button
                           onClick={() => {
                             handleFriendRequest(potentialFriend.id);
                             setRequestSent({...requestSent, to: potentialFriend.id})

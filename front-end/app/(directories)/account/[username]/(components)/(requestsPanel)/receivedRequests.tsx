@@ -20,7 +20,7 @@ export const RequestsFromOthers = ({
         </div>
 
         <div className={requestsStyles["users-list"]}>
-          {requestsFromOthers.map((eachRequest) => {
+          {requestsFromOthers.reverse().map((eachRequest) => {
             return (
               <div
                 key={eachRequest.id}

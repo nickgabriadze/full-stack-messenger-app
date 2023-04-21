@@ -11,7 +11,7 @@
   border-top-left-radius: 40px;
   animation: animateAppearance 500ms ease-in-out;
   gap: 1rem;
-
+  z-index: 2
 }
 
 .reqPanel img{
