@@ -35,7 +35,7 @@ export const UsersPanel = ({ access }: { access: string | null | undefined }) =>
   }, [access]);
 
   if(friends.length === 0){
-    return <h3>So quiet in here... Try adding some friends</h3>
+    return <h3 className={friendsStyles['empty-friends']}>So quiet in here... Try adding some friends</h3>
   }
 
   if (loading) {

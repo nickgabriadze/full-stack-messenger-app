@@ -4,26 +4,92 @@ import database from "./db";
 import generateAccessToken from "./utils/generateAccessToken";
 import { AuthenticatedRequest, verify } from "./utils/verifyToken";
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.get(
+  "/api/friends/get/requests",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    const userID = req.user.id;
+    const queryToRetrieveRequests = `SELECT requestsFrom.senderID as senderID, username from users JOIN (SELECT senderID from pendings WHERE receiverID=?) as requestsFrom
+    ON users.id = senderID;`;
+
+    try {
+      database
+        .query(queryToRetrieveRequests, [userID])
+        .then((users) => {
+          res.send(users);
+        })
+        .catch(() => {
+          res.sendStatus(500);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+app.get(
+  "/api/get/friend/sentRequests",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    const userID = req.user.id;
+    const dbQueryToGetSentRequests = `SELECT receiverID from pendings where senderID=?;`
+    try {
+
+      database.query(dbQueryToGetSentRequests, [userID]).then(
+        (sentToIDs) => res.send(sentToIDs)
+      ).catch(() => {
+        res.sendStatus(500)
+      })
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+app.post(
+  "/api/account/friend/add",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    const senderID = req.user.id;
+    const receiverID = req.body.receiverID;
+    const queryToAddToPendings =
+      "INSERT INTO pendings (senderID, receiverID) VALUES(?,?);";
+    try {
+      database
+        .query(queryToAddToPendings, [senderID, receiverID])
+        .then((result) => {
+          console.log(result);
+          res.sendStatus(200);
+        })
+        .catch(() => {
+          res.sendStatus(500);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 app.get(
   "/api/account/search/friends/:username",
   verify,
   (req: AuthenticatedRequest, res) => {
     const username = req.params.username;
-    const query = 
-    `SELECT users.id, username from users JOIN (SELECT ID FROM ((SELECT id, username from users where ID !=?) as potentialFriends) WHERE ID
+    const query = `SELECT users.id, username from users JOIN (SELECT ID FROM ((SELECT id, username from users where ID !=?) as potentialFriends) WHERE ID
     NOT IN ((SELECT userID from contacts WHERE ID != userID) UNION (SELECT contactID from contacts where ID != contactID))) as friends
     ON users.id = friends.id WHERE
-    username LIKE ?`
+    username LIKE ?`;
     try {
-      database.query(query, [req.user.id, username.concat("%")]).then((result) => {
-        console.log(req.user.id, username);
-        console.log(result);
-        res.send(result);
-      });
+      database
+        .query(query, [req.user.id, username.concat("%")])
+        .then((result) => {
+          res.send(result);
+        });
     } catch (err) {
       console.log(err);
     }

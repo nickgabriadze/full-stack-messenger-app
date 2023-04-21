@@ -69,3 +69,12 @@
    padding: 20px;
    color: grey
 }
+
+.empty-friends{
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  color:#3020ff;
+  width: 100%;
+  border-bottom: 1px solid #3020ff;
+}

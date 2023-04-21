@@ -1,5 +1,7 @@
 
 .reqPanel {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   height: 100%;
   width: 400px;
@@ -8,6 +10,8 @@
   top: 0;
   border-top-left-radius: 40px;
   animation: animateAppearance 500ms ease-in-out;
+  gap: 1rem;
+
 }
 
 .reqPanel img{
@@ -28,9 +32,14 @@
     word-wrap: break-word;
     word-break: keep-all;
     text-align: center;
-    color:#432ff1
+    color:#432ff1;
+    animation: singleFrameAtaTime 0.8s ease-in-out;
 }
 
+.search-for-friends {
+  display: flex;
+  flex-direction: column;
+}
 
 .search-for-friends input{
     background-color: transparent;
@@ -53,21 +62,30 @@
     justify-content: space-between;
     padding: 20px;
     color:#e9e8f6;
-    background-color: #978deb;
+    background-color: #3b2cc1;
     border-radius: 10px;
     width: 150%;
     align-items: center;
+    
    
 }
+
+.potential-friend img{
+  margin: 0;
+  margin-left: 20px;
+  margin-right: 20px;
+}
 .potential-friend button{
-    background-color: #432ff1;
+    background-color: #9b91f1;
     border: none;
-    color: white;
+    color: #554aba;
+    font-weight: bold;
     border-radius: 7px;
     font-size: medium;
     width: 80px;
     padding: 10px;
     cursor: pointer;
+
 }
 
 .search-friends-area{
@@ -80,6 +98,10 @@
     margin-top: 30px;
 }
 
+.user-searching{
+  color:#432ff1;
+  font-weight: bold;
+}
 
 @keyframes animateAppearance {
   from {
@@ -89,4 +111,85 @@
   to {
     width: 400px;
   }
+}
+
+
+@keyframes singleFrameAtaTime {
+    from{
+      filter:blur(10px);
+    }
+    to{
+      filter:blur(0px)
+    }
+}
+
+.from-others{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+ 
+  text-align: center;
+  margin-top: 20px;
+  gap: 1rem;
+  width: 60%;
+  margin: auto;
+}
+
+.from-others-header{
+  font-size: 1.5rem;
+  color:#432ff1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.each-user-req{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ background-color: #6456e6;
+ border-radius: 20px;
+ padding: 20px;
+}
+
+.each-user-req h3{
+  color:#dad8e8
+}
+
+.accept-ignore{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem
+}
+
+.users-list{
+  display: inherit;
+  flex-direction:column;
+  gap: 1rem;
+}
+
+.accept-ignore button{
+  background-color: #877edc;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.accept{
+  color: rgb(34, 62, 225);
+}
+
+.ignore{
+  color: rgb(103, 22, 22);
+}
+
+.no-requests{
+    text-align: center;
+    padding: 20px;
+    color:#41399e;
+    font-weight: bold;
 }
