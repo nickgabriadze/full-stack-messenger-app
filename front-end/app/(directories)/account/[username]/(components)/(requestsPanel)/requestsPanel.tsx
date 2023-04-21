@@ -9,7 +9,6 @@ import requestHasBeenSent from "./icons/request-has-been-sent-icon.svg";
 import sendFriendRequest from "@/app/api/account/sendFriendRequest";
 import RequestsFromOthers from "./receivedRequests";
 import retrieveRequests from "@/app/api/account/retrieveRequests";
-import retrieveUserFriendRequests from "@/app/api/account/retrieveUserSentRequests";
 
 export const RequestsPanel = ({
   access
