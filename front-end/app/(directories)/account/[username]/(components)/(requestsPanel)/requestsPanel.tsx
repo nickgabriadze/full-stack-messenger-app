@@ -11,7 +11,7 @@ import RequestsFromOthers from "./receivedRequests";
 import retrieveRequests from "@/app/api/account/retrieveRequests";
 
 export const RequestsPanel = ({
-  access
+  access,
 }: {
   access: string | null | undefined;
 }) => {
@@ -19,30 +19,28 @@ export const RequestsPanel = ({
   const [usersToSearch, setUsersToSearch] = useState<string>("");
   const [loadingSearchUsers, setLoadingSearchUsers] = useState(false);
   const [requestSentToIds, setRequestSentToIds] = useState<number[]>([]);
-  console.log(requestSentToIds)
-  const [userRequests, setUserRequests] = useState<{id: number, username: string}[]>([]);
+  const [userRequests, setUserRequests] = useState<
+    {senderID: number; username: string }[]
+  >([]);
   const [potentialFriends, setPotentialFriends] = useState<
     { id: number; username: string }[]
   >([]);
-  const [requestSent, setRequestSent] = useState<{sent: boolean, to:number}>({sent: false, to:-1});
+  const [requestSent, setRequestSent] = useState<{ sent: boolean; to: number }>(
+    { sent: false, to: -1 }
+  );
 
   const userToken = access === null || access === undefined ? "" : access;
   useEffect(() => {
-   
-    
     const retrieveUserRequests = async () => {
       try {
         const request = await retrieveRequests(userToken);
         const users = request.data;
-        
-        setUserRequests(users)
 
-      }catch(err) {
-        console.log(err)
+        setUserRequests(users);
+      } catch (err) {
+        console.log(err);
       }
-    }
-
-
+    };
 
     const retrieveUsers = async () => {
       setLoadingSearchUsers(true);
@@ -50,14 +48,11 @@ export const RequestsPanel = ({
         const request = await searchFriends(userToken, usersToSearch);
         const response = request.data;
         setPotentialFriends(response);
-       
       } catch (err) {
       } finally {
         setLoadingSearchUsers(false);
       }
     };
-
-
 
     if (usersToSearch.trim().length != 0) {
       retrieveUsers();
@@ -66,14 +61,12 @@ export const RequestsPanel = ({
       setPotentialFriends([]);
     }
 
-    if(!reqPanel){
+    if (!reqPanel) {
       setUsersToSearch("");
-      
     }
 
-    if(reqPanel) {
+    if (reqPanel) {
       retrieveUserRequests();
-     
     }
 
     return () => {
@@ -87,19 +80,16 @@ export const RequestsPanel = ({
       const response = request.data;
 
       console.log(response);
-      if(response === "OK"){
-        setRequestSent({...requestSent, sent: true})
-      }else{
-        setRequestSent({...requestSent, sent: false})
+      if (response === "OK") {
+        setRequestSent({ ...requestSent, sent: true });
+      } else {
+        setRequestSent({ ...requestSent, sent: false });
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-
-
- 
   return (
     <section className={requestsStyle["friends-requests"]}>
       <div onClick={() => setReqPanel((prev) => !prev)}>
@@ -111,17 +101,13 @@ export const RequestsPanel = ({
         />
       </div>
       {reqPanel && (
-        <div
-          className={requestsStyle["reqPanel"]}
-         
-        >
+        <div className={requestsStyle["reqPanel"]}>
           <Image
             src={closeIcon}
             width={30}
             height={30}
             alt="Close button"
             onClick={() => {
-              
               setReqPanel((prev) => !prev);
             }}
           />
@@ -148,16 +134,32 @@ export const RequestsPanel = ({
                         className={requestsStyle["potential-friend"]}
                       >
                         <h3>{potentialFriend.username}</h3>
-                       {requestSentToIds.filter(id => id === potentialFriend.id).length === 0 ? <button
-                          onClick={() => {
-                            handleFriendRequest(potentialFriend.id);
-                            setRequestSent({...requestSent, to: potentialFriend.id})
-                            setRequestSentToIds([...requestSentToIds, potentialFriend.id])
-                          }}
-                        >
-                          Add
-                        </button>:
-                        <Image src={requestHasBeenSent} alt="Request has been sent" width={30} height={30} />}
+                        {requestSentToIds.filter(
+                          (id) => id === potentialFriend.id
+                        ).length === 0 ? (
+                          <button
+                            onClick={() => {
+                              handleFriendRequest(potentialFriend.id);
+                              setRequestSent({
+                                ...requestSent,
+                                to: potentialFriend.id,
+                              });
+                              setRequestSentToIds([
+                                ...requestSentToIds,
+                                potentialFriend.id,
+                              ]);
+                            }}
+                          >
+                            Add
+                          </button>
+                        ) : (
+                          <Image
+                            src={requestHasBeenSent}
+                            alt="Request has been sent"
+                            width={30}
+                            height={30}
+                          />
+                        )}
                       </div>
                     );
                   })
@@ -167,11 +169,22 @@ export const RequestsPanel = ({
                   </p>
                 )}
               </div>
-              <div>{!loadingSearchUsers && potentialFriends.length === 0 && usersToSearch.length > 0 && <p className={requestsStyle["user-searching"]}>No users found with that username</p>}</div>
+              <div>
+                {!loadingSearchUsers &&
+                  potentialFriends.length === 0 &&
+                  usersToSearch.length > 0 && (
+                    <p className={requestsStyle["user-searching"]}>
+                      No users found with that username
+                    </p>
+                  )}
+              </div>
             </div>
           </div>
 
-          <RequestsFromOthers access={userToken} requestsFromOthers={userRequests} />
+          <RequestsFromOthers
+            access={userToken}
+            requestsFromOthers={userRequests}
+          />
         </div>
       )}
     </section>

@@ -14,7 +14,7 @@ app.get(
   async (req: AuthenticatedRequest, res) => {
     const userID = req.user.id;
     const queryToRetrieveRequests = `SELECT requestsFrom.senderID as senderID, username from users JOIN (SELECT senderID from pendings WHERE receiverID=?) as requestsFrom
-    ON users.id = senderID;`;
+    ON users.id = senderID ORDER BY senderID DESC;`;
 
     try {
       database
@@ -31,20 +31,42 @@ app.get(
   }
 );
 
+app.delete("/api/account/friends/removeRequest/:userIDToRemove",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    const userReceiver = req.user.id;
+    const userSender = req.params.userIDToRemove;
+
+    const removeRequestQuery = `DELETE FROM pendings where receiverID=? AND senderID=?;`;
+    try {
+      database
+        .query(removeRequestQuery, [userReceiver, userSender])
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch((err) => {
+          console.log(err)
+          res.sendStatus(500);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 app.get(
   "/api/get/friend/sentRequests",
   verify,
   async (req: AuthenticatedRequest, res) => {
     const userID = req.user.id;
-    const dbQueryToGetSentRequests = `SELECT receiverID from pendings where senderID=?;`
+    const dbQueryToGetSentRequests = `SELECT receiverID from pendings where senderID=?;`;
     try {
-
-      database.query(dbQueryToGetSentRequests, [userID]).then(
-        (sentToIDs) => res.send(sentToIDs)
-      ).catch(() => {
-        res.sendStatus(500)
-      })
-
+      database
+        .query(dbQueryToGetSentRequests, [userID])
+        .then((sentToIDs) => res.send(sentToIDs))
+        .catch(() => {
+          res.sendStatus(500);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -86,7 +108,13 @@ app.get(
       WHERE username LIKE ?`;
     try {
       database
-        .query(query, [req.user.id, req.user.id, req.user.id, req.user.id, username.concat("%")])
+        .query(query, [
+          req.user.id,
+          req.user.id,
+          req.user.id,
+          req.user.id,
+          username.concat("%"),
+        ])
         .then((result) => {
           res.send(result);
         });
