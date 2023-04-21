@@ -2,7 +2,9 @@ import requestsStyles from "./requestsPanel.module.css";
 
 export const RequestsFromOthers = ({
   requestsFromOthers,
+  access
 }: {
+  access: string
   requestsFromOthers: { id: number; username: string }[];
 }) => {
   if (requestsFromOthers.length === 0) {

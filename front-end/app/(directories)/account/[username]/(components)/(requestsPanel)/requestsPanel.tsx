@@ -172,7 +172,7 @@ export const RequestsPanel = ({
             </div>
           </div>
 
-          <RequestsFromOthers requestsFromOthers={userRequests} />
+          <RequestsFromOthers access={userToken} requestsFromOthers={userRequests} />
         </div>
       )}
     </section>
