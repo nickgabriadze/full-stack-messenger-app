@@ -80,13 +80,13 @@ app.get(
   verify,
   (req: AuthenticatedRequest, res) => {
     const username = req.params.username;
-    const query = `SELECT users.id, username from users JOIN (SELECT ID FROM ((SELECT id, username from users where ID !=?) as potentialFriends) WHERE ID
-    NOT IN ((SELECT userID from contacts WHERE ID != userID) UNION (SELECT contactID from contacts where ID != contactID))) as friends
-    ON users.id = friends.id WHERE
-    username LIKE ?`;
+    const query = `SELECT id, username from (SELECT DISTINCT id, username from users WHERE
+      users.id NOT IN (SELECT friendID from ((SELECT contactID as friendID from contacts where userID=?) UNION (SELECT userID from contacts where contactID=?) 
+      UNION (SELECT receiverID from pendings where senderID=?)) as potentialFriends where friendID = id) AND users.id != ?) as availableForSearch
+      WHERE username LIKE ?`;
     try {
       database
-        .query(query, [req.user.id, username.concat("%")])
+        .query(query, [req.user.id, req.user.id, req.user.id, req.user.id, username.concat("%")])
         .then((result) => {
           res.send(result);
         });
