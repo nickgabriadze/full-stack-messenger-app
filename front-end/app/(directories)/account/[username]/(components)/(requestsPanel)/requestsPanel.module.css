@@ -62,7 +62,6 @@
   color: #e9e8f6;
   background-color: #3b2cc1;
   border-radius: 10px;
-
   align-items: center;
 }
 
@@ -116,6 +115,8 @@
 .user-searching {
   color: #432ff1;
   font-weight: bold;
+  padding: 20px;
+  text-align: center;
 }
 
 @keyframes animateAppearance {
@@ -176,6 +177,16 @@
   gap: 0.5rem;
 }
 
+@keyframes animateRequestsAppearance {
+  from {
+    width: 0px;
+  }
+
+  to {
+    width: 300px;
+  }
+}
+
 .users-list {
   display: inherit;
   flex-direction: column;
@@ -184,6 +195,7 @@
   width: 300px;
   overflow-y: scroll;
   padding: 10px;
+  animation: animateRequestsAppearance 500ms ease-in-out;
 }
 
 .accept-ignore button {

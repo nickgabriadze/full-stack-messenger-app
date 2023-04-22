@@ -126,6 +126,15 @@ export const RequestsPanel = ({
                   setUsersToSearch(validateInput(e.target.value));
                 }}
               ></input>
+               <div>
+                {!loadingSearchUsers &&
+                  potentialFriends.length == 0 &&
+                  usersToSearch.length > 0 && (
+                    <p className={requestsStyle["user-searching"]}>
+                      No users found with that username
+                    </p>
+                  )}
+              </div>
               <div className={requestsStyle["search-friends-area"]}>
                 {!loadingSearchUsers ? (
                   potentialFriends.map((potentialFriend) => {
@@ -170,15 +179,7 @@ export const RequestsPanel = ({
                   </p>
                 )}
               </div>
-              <div>
-                {!loadingSearchUsers &&
-                  potentialFriends.length === 0 &&
-                  usersToSearch.length > 0 && (
-                    <p className={requestsStyle["user-searching"]}>
-                      No users found with that username
-                    </p>
-                  )}
-              </div>
+             
             </div>
           </div>
 
