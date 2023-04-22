@@ -9,6 +9,7 @@ import requestHasBeenSent from "./icons/request-has-been-sent-icon.svg";
 import sendFriendRequest from "@/app/api/account/sendFriendRequest";
 import RequestsFromOthers from "./receivedRequests";
 import retrieveRequests from "@/app/api/account/retrieveRequests";
+import { validateInput } from "@/app/(directories)/signup/(client-components)/inputs";
 
 export const RequestsPanel = ({
   access,
@@ -79,7 +80,7 @@ export const RequestsPanel = ({
       const request = await sendFriendRequest(userToken, id);
       const response = request.data;
 
-      console.log(response);
+      
       if (response === "OK") {
         setRequestSent({ ...requestSent, sent: true });
       } else {
@@ -122,7 +123,7 @@ export const RequestsPanel = ({
                 placeholder={"Search for friends..."}
                 value={usersToSearch}
                 onChange={(e) => {
-                  setUsersToSearch(e.target.value);
+                  setUsersToSearch(validateInput(e.target.value));
                 }}
               ></input>
               <div className={requestsStyle["search-friends-area"]}>
