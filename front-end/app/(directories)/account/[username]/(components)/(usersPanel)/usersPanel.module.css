@@ -3,17 +3,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
-
-
 
 .friends-list {
   display: flex;
   flex-direction: row;
   gap: 3rem;
   
-  
+
 }
 
 .each-friend {
@@ -21,11 +18,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor:pointer;
-  
-    
-  padding: 5px; 
- 
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+  padding: 5px;
 }
 
 .hand-crafted-image {
@@ -47,34 +42,35 @@
   left: 40px;
 }
 
-.username{
-    margin-top: -20px;
-    color:#b3afe9
+.username {
+  margin-top: -20px;
+  color: #b3afe9;
 }
 
-.panel hr{
-    width: 100%;
-    background-color: #3020ff;
-    height: 1px;
-    border: none;
-    margin-top: -1px;
-    z-index: -1
+.panel hr {
+  width: 100%;
+  background-color: #3020ff;
+  height: 3px;
+  border: none;
+  margin-top: -2px;
+  z-index: -1;
+  transition: all 100ms ease-in-out;
 }
 
-.loading{
-    font-family: 'Quicksand', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   padding: 20px;
-   color: grey
+.loading {
+  font-family: "Quicksand", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: grey;
 }
 
-.empty-friends{
+.empty-friends {
   display: flex;
   justify-content: center;
   padding: 20px;
-  color:#3020ff;
+  color: #3020ff;
   width: 100%;
-  border-bottom: 1px solid #3020ff;
+  border-bottom: 4px solid #3020ff;
 }

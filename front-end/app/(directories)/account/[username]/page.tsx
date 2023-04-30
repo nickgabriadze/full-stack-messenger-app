@@ -3,6 +3,7 @@ import { getAccessToken, retrieveToken } from "@/app/utils/retrieveToken";
 import HeaderPanel from "./(components)/(headerPanel)/headerPanel";
 import UsersPanel from "./(components)/(usersPanel)/usersPanel";
 import { usePathname } from "next/navigation";
+import MessagesPanel from "./(components)/(messagesPanel)/messagesPanel";
 
 export const AccountPage = () => {
   const userInformation = retrieveToken();
@@ -26,6 +27,7 @@ export const AccountPage = () => {
         />
 
         <UsersPanel access={accessToken}/>
+        <MessagesPanel access={accessToken}/>
       </div>
     );
   }

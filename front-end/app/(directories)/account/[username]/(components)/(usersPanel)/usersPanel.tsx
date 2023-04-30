@@ -5,6 +5,8 @@ import retrieveFriends from "@/app/api/account/retrieveFriends";
 import filledCircle from "../(headerPanel)/icons/button-checked.svg";
 import emptyCircle from "../(headerPanel)/icons/button-unchecked.svg";
 import Image from "next/image";
+import { setChatProperties } from "@/app/(store)/features/userSlice";
+import { useAppDispatch } from "@/app/(store)/hooks";
 
 export const UsersPanel = ({ access }: { access: string | null | undefined }) => {
   const [friends, setFriends] = useState<
@@ -12,6 +14,8 @@ export const UsersPanel = ({ access }: { access: string | null | undefined }) =>
   >([]);
   const [loading, setLoading] = useState(false);
   const [chosenFriend, setChosenFriend] = useState(-1);
+
+  const dispatchForChat = useAppDispatch();
 
   useEffect(() => {
     const getUserFreinds = async () => {
@@ -48,10 +52,27 @@ export const UsersPanel = ({ access }: { access: string | null | undefined }) =>
         {friends.map((friend) => (
           <div key={friend.id} className={friendsStyles["each-friend"]} 
           onClick={()=>{ 
+
+            
+
             if(chosenFriend === friend.id){
-                setChosenFriend(-1)
+                setChosenFriend(-1);
+                dispatchForChat( 
+                  setChatProperties({
+                    id: -1,
+                    username: "",
+                    chatOpen: false
+                  })
+                )
             }else{
                 setChosenFriend(friend.id)
+                dispatchForChat( 
+                  setChatProperties({
+                    id: friend.id,
+                    username: friend.username,
+                    chatOpen: true
+                  })
+                )
             }
             }}
           style={friend.id === chosenFriend ? {'borderBottom':'3px solid white'}: {}}>
