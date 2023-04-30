@@ -74,7 +74,8 @@
     align-items: center;
     height: fit-content;
     padding: 15px;
-    gap: 0.4rem
+    gap: 1rem;
+   
 }
 
 .controls-options button {
@@ -84,13 +85,14 @@
     border-radius: 30px;
     font-size: 1.1rem;
     padding: 20px;
-    
+
 }
 
 .controls-options button:hover{
     background-color: rgb(218, 216, 216);
     border: none;
     cursor: pointer;
+    transition: all 200ms ease-in-out;
 }
 
 .not-chatting{
