@@ -1,35 +1,41 @@
 import express from "express";
 import cors from "cors";
+
 import database from "./db";
 import generateAccessToken from "./utils/generateAccessToken";
 import { AuthenticatedRequest, verify } from "./utils/verifyToken";
+import { Server } from "socket.io";
+import http from "http";
 
 export const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.post(
+  "/api/account/friends/accept-request",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      const connection = await database.getConnection();
+      const { senderID } = req.body;
+      const userID = req.user.id;
+      // begin a transaction
+      await connection.beginTransaction();
+      const queryToRemoveFromPendings =
+        "DELETE FROM pendings where senderID=? AND receiverID=?;";
+      const queryToAddToContacts =
+        "INSERT INTO contacts (userID, contactID) VALUES(?, ?)";
+      await connection.query(queryToRemoveFromPendings, [senderID, userID]);
+      await connection.query(queryToAddToContacts, [senderID, userID]);
 
-app.post("/api/account/friends/accept-request", verify, async (req:AuthenticatedRequest, res) => {
-      try{
-        const connection = await database.getConnection();
-        const {senderID} = req.body;
-        const userID = req.user.id
-        // begin a transaction
-        await connection.beginTransaction();
-        const queryToRemoveFromPendings = "DELETE FROM pendings where senderID=? AND receiverID=?;"
-        const queryToAddToContacts = "INSERT INTO contacts (userID, contactID) VALUES(?, ?)"
-        await connection.query(queryToRemoveFromPendings, [senderID, userID])
-        await connection.query(queryToAddToContacts, [senderID, userID])
-
-        await connection.commit();
-        connection.release();
-        res.sendStatus(200)
-
-      }catch(err){
-        res.sendStatus(500)
-      }
-})
-
+      await connection.commit();
+      connection.release();
+      res.sendStatus(200);
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  }
+);
 
 app.get(
   "/api/get/friends/requests",
@@ -54,7 +60,8 @@ app.get(
   }
 );
 
-app.delete("/api/account/friends/removeRequest/:userIDToRemove",
+app.delete(
+  "/api/account/friends/removeRequest/:userIDToRemove",
   verify,
   async (req: AuthenticatedRequest, res) => {
     const userReceiver = req.user.id;
@@ -68,7 +75,7 @@ app.delete("/api/account/friends/removeRequest/:userIDToRemove",
           res.sendStatus(200);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           res.sendStatus(500);
         });
     } catch (err) {
@@ -248,4 +255,34 @@ app.post("/api/account/register", async (req, res) => {
 
 app.listen(3001, () => {
   console.log("Listening for stuff on port 3001");
+});
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (connectedSocket) => {
+  console.log(connectedSocket.id);
+
+  connectedSocket.on("error", (error) => {
+    console.error("Socket Error:", error.message);
+  });
+
+
+  connectedSocket.on("receiveOnlineFriends", (friends) => {
+    console.log(friends)
+  })
+
+  connectedSocket.on("disconnect", () => {
+    console.log("disconnected");
+  });
+});
+
+server.listen(3002, () => {
+  console.log("listening for connections on port 3002");
 });

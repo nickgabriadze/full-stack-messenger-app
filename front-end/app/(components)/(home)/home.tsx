@@ -3,6 +3,7 @@ import homeStyling from "./home.module.css";
 import Link from "next/link";
 
 export const Home: NextPage = () => {
+  
   return (
     <>
       <div className={homeStyling['home-wrapper']}>

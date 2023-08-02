@@ -7,8 +7,8 @@ import emptyCircle from "../(headerPanel)/icons/button-unchecked.svg";
 import Image from "next/image";
 import { setChatProperties } from "@/app/(store)/features/userSlice";
 import { useAppDispatch } from "@/app/(store)/hooks";
-
-export const UsersPanel = ({ access }: { access: string | null | undefined }) => {
+import {Socket} from "socket.io-client"
+export const UsersPanel = ({ access, socket }: { access: string | null | undefined, socket:Socket }) => {
   const [friends, setFriends] = useState<
     { id: number; username: string; status: number }[]
   >([]);
@@ -45,6 +45,8 @@ export const UsersPanel = ({ access }: { access: string | null | undefined }) =>
   if (loading) {
     return <h1 className={friendsStyles['loading']}>Loading...</h1>;
   }
+
+  socket.emit("receiveOnlineFriends", (friends))
 
   return (
     <section className={friendsStyles["panel"]}>
