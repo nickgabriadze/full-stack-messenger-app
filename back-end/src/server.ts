@@ -214,7 +214,7 @@ app.post("/api/account/login", async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
-    console.log(password);
+
     database.query(query, [username, password]).then((result) => {
       if (result.length !== 0) {
         const { id, username } = result[0];
@@ -301,9 +301,25 @@ io.on("connection", (connectedSocket) => {
   connectedSocket.on("error", (error) => {
     console.error("Socket Error:", error.message);
   });
-  connectedSocket.on("sendUserFriendRoomsInformation", (data) => [
-    console.log(data)
-  ])
+
+  connectedSocket.on("send-message", (data) => {
+    const room = data[0]
+    const message = data[1]
+    console.log(message)
+    connectedSocket.to(room).emit("receive-message", message)
+  })
+
+  connectedSocket.on("sendUserFriendRoomsInformation", (data) => 
+  {
+    data.forEach((chatRoom:{
+      friendId: number,
+      roomId: string
+    }) => {
+      connectedSocket.join(chatRoom.roomId)
+    })
+
+    console.log(connectedSocket)
+  })
   connectedSocket.on("disconnect", () => {
     console.log("disconnected");
   });

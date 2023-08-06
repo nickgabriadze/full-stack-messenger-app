@@ -4,10 +4,13 @@ import Image from "next/image";
 import sendIcon from "./icons/send-message-icon.svg";
 import { setChatProperties } from "@/app/(store)/features/userSlice";
 import { Socket } from "socket.io-client";
+import { useState } from "react";
 export const MessagesPanel = ({
   access,
-  socket
+  socket,
+  messageData
 }: {
+  messageData: string
   socket:Socket
   access: string | undefined | null;
 }) => {
@@ -15,7 +18,9 @@ export const MessagesPanel = ({
     (state) => state.user
   );
 
+  const [message, setMessage] = useState<string>("")
   const chatDispatch = useAppDispatch();
+    const [messagesBox, setMessagesBox] = useState<string[]>([])
 
   if (
     chattingWithID === -1 &&
@@ -28,21 +33,26 @@ export const MessagesPanel = ({
 
    
 
-    socket.on("receivejohn", (data) => {
-        console.log(data)
-    })
     
 
   return (
     <section className={messagesStyles["message-section"]}>
-      <div className={messagesStyles["messages-box"]}></div>
+      <div className={messagesStyles["messages-box"]}>{messageData}
+      </div>
 
       <div className={messagesStyles["controls"]}>
         <div className={messagesStyles["controls-txt"]}>
-          <textarea placeholder={`Send message to ${chattingWithUsername}`} className={messagesStyles['msgbox']}></textarea>
+          <input placeholder={`Send message to ${chattingWithUsername}`} 
+          onChange={(e) => {
+            setMessage(e.target.value)
+          }}
+          value={message}
+          className={messagesStyles['msgbox']}></input>
           <button className={messagesStyles['send-msg-btn']}
           onClick={() => {
-            socket.emit("sendmessagetojohn", ("hello john"))
+            setMessagesBox((prev) => [...prev, message])
+            socket.emit("send-message", (["4e7abffd245bf1a7cae68fb4fd5b5ce4", message]))
+
           }}
           >
             <Image src={sendIcon} alt="Send Message" width={30} height={30}></Image>

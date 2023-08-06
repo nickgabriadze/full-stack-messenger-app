@@ -19,7 +19,7 @@ export const AccountPage = () => {
 
   const router = usePathname().split("/")[2];
   const [loading, setLoading] = useState(true)
-  const [friendRooms, setFriendRooms] = useState([])
+  const [messageData, setMessageData] = useState<string>('')
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket.id);
@@ -31,12 +31,13 @@ export const AccountPage = () => {
       try {
         const request = await retrieveFriendChatRooms((accessToken === null || accessToken === undefined) ? "" : accessToken);
         const response = request.data;
-        setFriendRooms(response);
+        socket.emit("sendUserFriendRoomsInformation", response)
         
       } catch (err) {
         console.log(err);
       } finally {
         setLoading(false);
+        
       }
     };
 
@@ -51,11 +52,11 @@ export const AccountPage = () => {
   if (router !== userInformation?.username) {
     window.location.href = `/account/${userInformation?.username}`;
   }
-  
-  if (loading === false){
-    socket.emit("sendUserFriendRoomsInformation", friendRooms)
-  }
-  
+
+  socket.on("receive-message", (data) => {
+    setMessageData(data)
+  })
+    
   if (userInformation === undefined) {
     window.location.href = "/login";
   } else {
@@ -67,7 +68,9 @@ export const AccountPage = () => {
         />
 
         <UsersPanel access={accessToken} socket={socket} />
-        <MessagesPanel access={accessToken} socket={socket}/>
+        <MessagesPanel access={accessToken} socket={socket} 
+        messageData={messageData}
+        />
       </div>
     );
   }
