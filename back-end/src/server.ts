@@ -155,6 +155,30 @@ app.get(
 );
 
 app.get(
+  "/api/account/rooms",
+  verify,
+  async (req: AuthenticatedRequest, res) => {
+    const userId = req.user.id;
+    const query = `SELECT userId as friendId, roomId from ((SELECT userId, roomId from Contacts where contactId=?)
+  UNION 
+  (SELECT contactId, roomId from Contacts where userId = ?)) as merged`;
+
+    try {
+      database
+        .query(query, [userId, userId])
+        .then((rooms) => {
+          res.send(rooms);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+app.get(
   "/api/account/friends",
   verify,
   async (req: AuthenticatedRequest, res) => {
@@ -185,7 +209,7 @@ app.post("/api/account/login", async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
-
+    console.log(password);
     database.query(query, [username, password]).then((result) => {
       if (result.length !== 0) {
         const { id, username } = result[0];
@@ -272,12 +296,9 @@ io.on("connection", (connectedSocket) => {
   connectedSocket.on("error", (error) => {
     console.error("Socket Error:", error.message);
   });
-
-
-  connectedSocket.on("receiveOnlineFriends", (friends) => {
-    console.log(friends)
-  })
-
+  connectedSocket.on("sendUserFriendRoomsInformation", (data) => [
+    console.log(data)
+  ])
   connectedSocket.on("disconnect", () => {
     console.log("disconnected");
   });

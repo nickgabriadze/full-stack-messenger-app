@@ -3,9 +3,12 @@ import messagesStyles from "./messagesPanel.module.css";
 import Image from "next/image";
 import sendIcon from "./icons/send-message-icon.svg";
 import { setChatProperties } from "@/app/(store)/features/userSlice";
+import { Socket } from "socket.io-client";
 export const MessagesPanel = ({
   access,
+  socket
 }: {
+  socket:Socket
   access: string | undefined | null;
 }) => {
   const { chattingWithID, chattingWithUsername, chatOpen } = useAppSelector(
@@ -22,6 +25,14 @@ export const MessagesPanel = ({
     return <p className={messagesStyles["not-chatting"]}>Choose a person to talk to</p>;
   }
 
+
+   
+
+    socket.on("receivejohn", (data) => {
+        console.log(data)
+    })
+    
+
   return (
     <section className={messagesStyles["message-section"]}>
       <div className={messagesStyles["messages-box"]}></div>
@@ -29,7 +40,11 @@ export const MessagesPanel = ({
       <div className={messagesStyles["controls"]}>
         <div className={messagesStyles["controls-txt"]}>
           <textarea placeholder={`Send message to ${chattingWithUsername}`} className={messagesStyles['msgbox']}></textarea>
-          <button className={messagesStyles['send-msg-btn']}>
+          <button className={messagesStyles['send-msg-btn']}
+          onClick={() => {
+            socket.emit("sendmessagetojohn", ("hello john"))
+          }}
+          >
             <Image src={sendIcon} alt="Send Message" width={30} height={30}></Image>
           </button>
         </div>

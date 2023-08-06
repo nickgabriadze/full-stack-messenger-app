@@ -46,7 +46,7 @@ export const UsersPanel = ({ access, socket }: { access: string | null | undefin
     return <h1 className={friendsStyles['loading']}>Loading...</h1>;
   }
 
-  socket.emit("receiveOnlineFriends", (friends))
+  
 
   return (
     <section className={friendsStyles["panel"]}>
