@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
-
+import { v4 as uuidv4 } from 'uuid';
 import database from "./db";
 import generateAccessToken from "./utils/generateAccessToken";
 import { AuthenticatedRequest, verify } from "./utils/verifyToken";
 import { Server } from "socket.io";
 import http from "http";
+
+
+
+
 
 export const app = express();
 app.use(cors());
@@ -16,6 +20,7 @@ app.post(
   verify,
   async (req: AuthenticatedRequest, res) => {
     try {
+      let randUUIDString = uuidv4().substring(0, 32)
       const connection = await database.getConnection();
       const { senderID } = req.body;
       const userID = req.user.id;
@@ -24,9 +29,9 @@ app.post(
       const queryToRemoveFromPendings =
         "DELETE FROM pendings where senderID=? AND receiverID=?;";
       const queryToAddToContacts =
-        "INSERT INTO contacts (userID, contactID) VALUES(?, ?)";
+        "INSERT INTO contacts (userID, contactID, roomId) VALUES(?, ?, ?)";
       await connection.query(queryToRemoveFromPendings, [senderID, userID]);
-      await connection.query(queryToAddToContacts, [senderID, userID]);
+      await connection.query(queryToAddToContacts, [senderID, userID, randUUIDString]);
 
       await connection.commit();
       connection.release();
