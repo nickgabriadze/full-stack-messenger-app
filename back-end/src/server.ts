@@ -1,15 +1,11 @@
 import express from "express";
 import cors from "cors";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import database from "./db";
 import generateAccessToken from "./utils/generateAccessToken";
 import { AuthenticatedRequest, verify } from "./utils/verifyToken";
 import { Server } from "socket.io";
 import http from "http";
-
-
-
-
 
 export const app = express();
 app.use(cors());
@@ -20,7 +16,7 @@ app.post(
   verify,
   async (req: AuthenticatedRequest, res) => {
     try {
-      let randUUIDString = uuidv4().substring(0, 32)
+      let randUUIDString = uuidv4().substring(0, 32);
       const connection = await database.getConnection();
       const { senderID } = req.body;
       const userID = req.user.id;
@@ -31,7 +27,11 @@ app.post(
       const queryToAddToContacts =
         "INSERT INTO contacts (userID, contactID, roomId) VALUES(?, ?, ?)";
       await connection.query(queryToRemoveFromPendings, [senderID, userID]);
-      await connection.query(queryToAddToContacts, [senderID, userID, randUUIDString]);
+      await connection.query(queryToAddToContacts, [
+        senderID,
+        userID,
+        randUUIDString,
+      ]);
 
       await connection.commit();
       connection.release();
@@ -282,6 +282,48 @@ app.post("/api/account/register", async (req, res) => {
   }
 });
 
+app.get('/api/account/friends/messages/:id', verify, async (req:AuthenticatedRequest, res) => {
+    const query = `SELECT senderId as authorID, receiverID, message, time from Conversations WHERE senderId = ? and receiverId = ? 
+    or senderId = ? and receiverId = ?`
+
+    const friend = req.params.id
+ 
+    try{
+      
+      database.query(query, [req.user.id, friend, friend, req.user.id]).then((result) => {
+        res.send(result)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }catch(err) {
+      console.log(err)
+    }
+})
+
+app.post("/api/account/friend/sendMessage", verify, async (req, res) => {
+  const query = `INSERT INTO conversations (senderID, receiverID, message, time) VALUES(?, ?, ?, ?)`;
+  
+  const author = req.body.messageData.authorID;
+  const receiver = req.body.messageData.receiverID;
+  const message = req.body.messageData.messageContent;
+  const time = req.body.messageData.time
+
+  try {
+
+   database.query(query, [author, receiver, message, time]).then(
+    result => {
+      console.log(result)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      res.sendStatus(200)
+    })
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(3001, () => {
   console.log("Listening for stuff on port 3001");
 });
@@ -303,23 +345,17 @@ io.on("connection", (connectedSocket) => {
   });
 
   connectedSocket.on("send-message", (data) => {
-    const room = data[0]
-    const message = data[1]
-    console.log(message)
-    connectedSocket.to(room).emit("receive-message", message)
-  })
+    const room = data[0];
+    const message = data[1];
+    console.log(message);
+    connectedSocket.to(room).emit("receive-message", message);
+  });
 
-  connectedSocket.on("sendUserFriendRoomsInformation", (data) => 
-  {
-    data.forEach((chatRoom:{
-      friendId: number,
-      roomId: string
-    }) => {
-      connectedSocket.join(chatRoom.roomId)
-    })
-
-    console.log(connectedSocket)
-  })
+  connectedSocket.on("sendUserFriendRoomsInformation", (data) => {
+    data.forEach((chatRoom: { friendId: number; roomId: string }) => {
+      connectedSocket.join(chatRoom.roomId);
+    });
+  });
   connectedSocket.on("disconnect", () => {
     console.log("disconnected");
   });
