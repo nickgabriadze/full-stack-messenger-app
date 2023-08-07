@@ -2,15 +2,14 @@ import { useAppDispatch, useAppSelector } from "@/app/(store)/hooks";
 import messagesStyles from "./messagesPanel.module.css";
 import Image from "next/image";
 import sendIcon from "./icons/send-message-icon.svg";
-import { setChatProperties } from "@/app/(store)/features/userSlice";
+import { setChatProperties, setChatRooms } from "@/app/(store)/features/userSlice";
 import { Socket } from "socket.io-client";
 import { useState } from "react";
 export const MessagesPanel = ({
   access,
-  socket,
-  messageData
+  socket
 }: {
-  messageData: string
+  
   socket:Socket
   access: string | undefined | null;
 }) => {
@@ -37,7 +36,7 @@ export const MessagesPanel = ({
 
   return (
     <section className={messagesStyles["message-section"]}>
-      <div className={messagesStyles["messages-box"]}>{messageData}
+      <div className={messagesStyles["messages-box"]}>{}
       </div>
 
       <div className={messagesStyles["controls"]}>
@@ -67,7 +66,8 @@ export const MessagesPanel = ({
                     chatDispatch(setChatProperties({
                         id: -1,
                         chatOpen: false,
-                        username: ""
+                        username: "",
+                        chatRoomID: ""
                     }))
                 }}>Close Chat</button>
         </div>

@@ -7,11 +7,17 @@ import MessagesPanel from "./(components)/(messagesPanel)/messagesPanel";
 import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import retrieveFriendChatRooms from "@/app/api/account/retrieveRooms";
+import { useAppDispatch, useAppSelector } from "@/app/(store)/hooks";
+import { setChatRooms } from "@/app/(store)/features/userSlice";
 
 const socket: Socket = io("http://localhost:3002");
 
 export const AccountPage = () => {
   const userInformation = retrieveToken();
+  const dispatch = useAppDispatch()
+  const chatRooms = useAppSelector((state) => state.user.chatRooms)
+  const chattingWith = useAppSelector((state) => state.user)
+  console.log(chattingWith.chatroomID, chattingWith.chattingWithID)
   const accessToken =
     getAccessToken() === undefined || getAccessToken() === null
       ? ""
@@ -20,6 +26,7 @@ export const AccountPage = () => {
   const router = usePathname().split("/")[2];
   const [loading, setLoading] = useState(true)
   const [messageData, setMessageData] = useState<string>('')
+  
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket.id);
@@ -32,7 +39,9 @@ export const AccountPage = () => {
         const request = await retrieveFriendChatRooms((accessToken === null || accessToken === undefined) ? "" : accessToken);
         const response = request.data;
         socket.emit("sendUserFriendRoomsInformation", response)
-        
+        dispatch(setChatRooms({
+          rooms: response
+        }))
       } catch (err) {
         console.log(err);
       } finally {
@@ -47,15 +56,15 @@ export const AccountPage = () => {
     return () => {
       socket.off("connect");
     };
-  }, [accessToken]);
+  }, [accessToken, dispatch]);
 
+ 
   if (router !== userInformation?.username) {
     window.location.href = `/account/${userInformation?.username}`;
   }
 
-  socket.on("receive-message", (data) => {
-    setMessageData(data)
-  })
+  
+ 
     
   if (userInformation === undefined) {
     window.location.href = "/login";
@@ -67,9 +76,9 @@ export const AccountPage = () => {
           access={accessToken}
         />
 
-        <UsersPanel access={accessToken} socket={socket} />
+        <UsersPanel access={accessToken} />
         <MessagesPanel access={accessToken} socket={socket} 
-        messageData={messageData}
+       
         />
       </div>
     );
