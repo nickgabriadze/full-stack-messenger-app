@@ -12,12 +12,12 @@ import { setChatRooms } from "@/app/(store)/features/userSlice";
 
 const socket: Socket = io("http://localhost:3002");
 
+   
 export const AccountPage = () => {
   const userInformation = retrieveToken();
   const dispatch = useAppDispatch()
-  const chatRooms = useAppSelector((state) => state.user.chatRooms)
-  const chattingWith = useAppSelector((state) => state.user)
-  console.log(chattingWith.chatroomID, chattingWith.chattingWithID)
+  
+ 
   const accessToken =
     getAccessToken() === undefined || getAccessToken() === null
       ? ""
@@ -29,7 +29,7 @@ export const AccountPage = () => {
   
   useEffect(() => {
     socket.on("connect", () => {
-      console.log(socket.id);
+      
     });
 
 
@@ -49,9 +49,10 @@ export const AccountPage = () => {
         
       }
     };
-
+    
     getUserFriendRooms();
-
+  
+  
     // Clean up the event listener when the component unmounts
     return () => {
       socket.off("connect");
@@ -63,9 +64,7 @@ export const AccountPage = () => {
     window.location.href = `/account/${userInformation?.username}`;
   }
 
-  
- 
-    
+
   if (userInformation === undefined) {
     window.location.href = "/login";
   } else {
@@ -78,7 +77,7 @@ export const AccountPage = () => {
 
         <UsersPanel access={accessToken} />
         <MessagesPanel access={accessToken} socket={socket} 
-       
+
         />
       </div>
     );

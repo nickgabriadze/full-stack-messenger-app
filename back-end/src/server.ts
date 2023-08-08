@@ -299,7 +299,22 @@ app.get('/api/account/friends/messages/:id', verify, async (req:AuthenticatedReq
       console.log(err)
     }
 })
+app.delete('/api/account/friends/deleteChat/:friendID', verify, async (req:AuthenticatedRequest, res) => {
+    const query = `DELETE FROM conversations where senderID = ? and ReceiverID = ? or senderID = ? and receiverID = ?;`
 
+    try{
+
+      database.query(query, [req.user.id, req.params.friendID, req.params.friendID, req.user.id]).
+      then(() => {
+        res.sendStatus(200)
+      }).catch((err) => {
+        console.log(err)
+      })
+
+    }catch(err){
+      console.log(err)
+    }
+})
 app.post("/api/account/friend/sendMessage", verify, async (req, res) => {
   const query = `INSERT INTO conversations (senderID, receiverID, message, time) VALUES(?, ?, ?, ?)`;
   
@@ -345,10 +360,10 @@ io.on("connection", (connectedSocket) => {
   });
 
   connectedSocket.on("send-message", (data) => {
-    const room = data[0];
-    const message = data[1];
-    console.log(message);
-    connectedSocket.to(room).emit("receive-message", message);
+    const {authorID, receiverID, message, time, room} = data;
+
+
+    connectedSocket.to(room).emit("receive-message", {authorID, receiverID, message, time});
   });
 
   connectedSocket.on("sendUserFriendRoomsInformation", (data) => {
